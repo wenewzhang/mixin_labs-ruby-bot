@@ -243,6 +243,7 @@ ruby websocket_mixin_bot.rb
 
 Mixin Messenger支持的消息类型很多，具体可到下面链接查看:  [WebSocket消息类型](https://developers.mixin.one/api/beta-mixin-message/websocket-messages/).
 
+### 源代码解释
 每接收到一个消息，需要按消息编号(message_id)给服务器回复一个"已读"的消息,避免服务器在机器人重新登入后，再次发送处理过的消息！
 ```ruby
 def self.GenerateReceipt(msgid)
@@ -263,6 +264,7 @@ def self.GenerateReceipt(msgid)
   return data
 end
 ```
+
 ### 完成
 现在你的机器人APP运行起来了，你打算如何改造你的机器人呢？
 

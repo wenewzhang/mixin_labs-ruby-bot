@@ -223,6 +223,23 @@ module Utils
 end
 ```
 
+Run the code
+```bash
+ruby websocket_mixin_bot.rb
+```
+The following content will be displayed in console if everything works.
+```bash
+[:open]
+[:message]
+{"id"=>"2e13092f-4048-488f-82bc-f5ee9f984002", "action"=>"LIST_PENDING_MESSAGES"}
+```
+
+Add the bot(for example, this bot id is 7000101639) as your friend in [Mixin Messenger](https://mixin.one/messenger) and send your messages.
+![mixin_messenger](https://raw.githubusercontent.com/wenewzhang/mixin_labs-php-bot/master/helloworld.jpeg)
+
+Not only texts, images and other type message will be pushed to your bot. You can find more [details](https://developers.mixin.one/api/beta-mixin-message/websocket-messages/) about Messenger message.
+
+### Source code summary
 Send a READ operation message to the server let it knows this message has been read. The bot will receive the duplicated message when the bot connected to server again if bot don't send response.
 ```ruby
 def self.GenerateReceipt(msgid)
@@ -243,23 +260,6 @@ def self.GenerateReceipt(msgid)
   return data
 end
 ```
-
-Run the code
-```bash
-ruby websocket_mixin_bot.rb
-```
-The following content will be displayed in console if everything works.
-```bash
-[:open]
-[:message]
-{"id"=>"2e13092f-4048-488f-82bc-f5ee9f984002", "action"=>"LIST_PENDING_MESSAGES"}
-```
-
-Add the bot(for example, this bot id is 7000101639) as your friend in [Mixin Messenger](https://mixin.one/messenger) and send your messages.
-![mixin_messenger](https://raw.githubusercontent.com/wenewzhang/mixin_labs-php-bot/master/helloworld.jpeg)
-
-
-Not only texts, images and other type message will be pushed to your bot. You can find more [details](https://developers.mixin.one/api/beta-mixin-message/websocket-messages/) about Messenger message.
 
 ### End
 Now your bot worked, you can hack it.
