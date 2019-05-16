@@ -225,6 +225,22 @@ module Utils
 end
 ```
 
+### 编译与运行
+执行 **ruby websocket_mixin_bot.rb** 程序
+```bash
+ruby websocket_mixin_bot.rb
+```
+
+如果一切正常，显示如下：
+```bash
+[:open]
+[:message]
+{"id"=>"2e13092f-4048-488f-82bc-f5ee9f984002", "action"=>"LIST_PENDING_MESSAGES"}
+```
+
+在手机安装 [Mixin Messenger](https://mixin.one/),增加机器人为好友,(比如这个机器人是7000101639) 然后发送消息给它,效果如下!
+![mixin_messenger](https://raw.githubusercontent.com/wenewzhang/mixin_labs-php-bot/master/helloworld.jpeg)
+
 Mixin Messenger支持的消息类型很多，具体可到下面链接查看:  [WebSocket消息类型](https://developers.mixin.one/api/beta-mixin-message/websocket-messages/).
 
 每接收到一个消息，需要按消息编号(message_id)给服务器回复一个"已读"的消息,避免服务器在机器人重新登入后，再次发送处理过的消息！
