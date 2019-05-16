@@ -2,7 +2,7 @@ require 'faye/websocket'
 require 'eventmachine'
 require 'json'
 require 'zlib'
-require 'mixin_bot'
+require '../mixin_bot/lib/mixin_bot'
 require 'yaml'
 
 yaml_hash = YAML.load_file('./config.yml')
@@ -35,7 +35,7 @@ EM.run {
     data = event.data
     msg = MixinBot.api.read_message(data)
     jsmsg =  JSON.parse msg
-    # p jsmsg
+    p jsmsg
     # p jsmsg["data"]
     if jsmsg["action"] == "CREATE_MESSAGE" && jsmsg["data"] != nil
       msgid = jsmsg["data"]["message_id"]
@@ -49,7 +49,19 @@ EM.run {
       end
       if jsmsg["data"]["category"] == "SYSTEM_ACCOUNT_SNAPSHOT"
         jsdata =  JSON.parse (Base64.decode64(jsmsg["data"]["data"]))
-        p jsdata
+        p jsdata["amount"]
+        if jsdata["amount"].to_f > 0
+          p "The Bot got coins:" + jsdata["amount"]
+          transInfo = MixinBot.api.create_transfer(MixinBot.api.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
+                                            {
+                                              asset_id: jsdata["asset_id"],
+                                              opponent_id: jsdata["opponent_id"],
+                                              amount: jsdata["amount"],
+                                              trace_id: SecureRandom.uuid,
+                                              memo: "from ruby"
+                                            })
+           p transInfo
+        end
       end
     end
   end
