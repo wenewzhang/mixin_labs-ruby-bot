@@ -1,20 +1,18 @@
-# Ruby Bitcoin tutorial based on Mixin Network
-![](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/Bitcoin_php.jpg)
-A Mixin messenger bot will be created in this tutorial. The bot is powered by Ruby and echo message and Bitcoin from user.
+# 基于Mixin Network的Ruby比特币开发教程
+![](https://github.com/wenewzhang/mixin_labs-php-bot/raw/master/Bitcoin_php.jpg)
+[Mixin Network](https://mixin.one) 是一个免费的 极速的端对端加密数字货币交易系统.
+在本章中，你可以按教程在Mixin Messenger中创建一个bot来接收用户消息, 学到如何给机器人转**比特币** 或者 让机器人给你转**比特币**.
 
-[Mixin network resource](https://github.com/awesome-mixin-network/index_of_Mixin_Network_resource)
+[Mixin network 资源汇总](https://github.com/awesome-mixin-network/index_of_Mixin_Network_resource)
 
-## What you will learn from this tutorial
-1. [How to create bot in Mixin messenger and reply message to user](https://github.com/wenewzhang/mixin_labs-php-bot#create-bot-and-receive-message-from-user)| [Chinese](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README-zhchs.md)
-<!-- 2. [How to receive Bitcoin and send Bitcoin in Mixin Messenger](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README2.md)| [Chinese](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README2-zhchs.md)
-3. [Create Bitcoin wallet, read balance and send Bitcoin by PHP based on Mixin Network](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README3.md)| [Chinese](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README3-zhchs.md)
-4. [How to trade bitcoin through PHP language: Pay to ExinCore](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README4.md) |  [Chinese](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README4-zhchs.md)
-5. [How to trade bitcoin through PHP: List your order on Ocean.One](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README5.md) | [Chinese](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README5-zhchs.md)
-6. [How to trade ERC-20 compliant coins on OceanOne through PHP](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README6.md) | [Chinese](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README6-zhchs.md) -->
+## 课程简介
+1. [创建一个机器人](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README-zhchs.md)
 
-## Create bot in Mixin messenger and reply message to user
-### Ruby environment setup:
-This tutorial is written in Ruby.
+## 创建一个接受消息的机器人
+通过本教程，你将学会如何用PHP创建一个机器人APP,让它能接受消息.
+
+### Ruby 环境安装:
+本教程的程序基于 **Ruby** 开发.
 
 On macOS
 ```bash
@@ -40,37 +38,40 @@ rbenv install 2.6.3
 rbenv shell 2.6.3
 ```
 
-Following command can be used to check the installation
+检查安装情况！
+
 ```bash
 wenewzha:~ wenewzhang$ rbenv shell 2.6.3
 wenewzha:minecraft wenewzhang$ ruby -v
 ruby 2.6.3p62 (2019-04-16 revision 67580) [x86_64-darwin18]
 ```
-### Install the dependent packages
-This bot dependent **faye-websocket**  and **mixin_bot**.
+
+### 安装依赖包
+本教程依赖 **faye-websocket**  与 **mixin_bot**.
 
 ```bash
 gem install faye-websocket
 gem install mixin_bot
 ```
 
-### Create the project
-Go to your documents folder then create a directory, for example: **mixin_labs-ruby-bot**
+### 创建你的项目
+到你的工作文档中，创建一个目录，并取一个名字，比如:**mixin_labs-ruby-bot**
 ```bash
 mkdir mixin_labs-ruby-bot
 mixin_labs-ruby-bot
 ```
 
-### Create your first app in Mixin Network developer dashboard
-You need to create an app in dashboard. This [tutorial](https://mixin-network.gitbook.io/mixin-network/mixin-messenger-app/create-bot-account) can help you.
+### 创建第一个机器人APP
+按下面的提示，到mixin.one创建一个APP[tutorial](https://mixin-network.gitbook.io/mixin-network/mixin-messenger-app/create-bot-account).
 
-### Generate parameter of your app in dashboard
-After app is created in dashboard, you still need to [generate parameter](https://mixin-network.gitbook.io/mixin-network/mixin-messenger-app/create-bot-account#generate-secure-parameter-for-your-app)
-and write down required content, these content will be written into config.yml file.
+### 生成相应的参数
+记下这些[生成的参数](https://mixin-network.gitbook.io/mixin-network/mixin-messenger-app/create-bot-account#generate-secure-parameter-for-your-app)
+它们将用于config.php中.
 
-![mixin_network-keys](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/mixin_network-keys.jpg)
-In project folder, create a file: config.yml. Copy the following content into it.
+![mixin_network-keys](https://github.com/wenewzhang/mixin_labs-php-bot/raw/master/mixin_network-keys.jpg)
+在项目目录下，创建config.yml,将生成的参数，替换成你的！
 > config.yml
+`> config.yml
 ```ruby
 MIXIN_CLIENT_ID: 'a1ce2967-a534-417d-bf12-c86571e4eefa'
 MIXIN_CLIENT_SECRET: 'a3f52f6c417f24bfdf583ed884c5d0cb489320c58222b061298e4a2d41a1bbd7'
@@ -95,10 +96,11 @@ MIXIN_PRIVATE_KEY: |
   Q04EytqK7grDDS9PsfeXqdUo0D3NMSJ0BYs/kDsqGSc=
   -----END RSA PRIVATE KEY-----
 ```
-Replace the value with **content generated in dashboard**.
 
-### Hello world in Ruby
-Copy the following code into websocket_mixin_bot.rb, create it if it is missing in your folder
+需要替换的参数包括： client_id, client_secret, and the pin, pin token, session_id, private key.
+
+### 经典的Hello world
+websocket_mixin_bot.rb
 ```ruby
 require 'faye/websocket'
 require 'eventmachine'
@@ -223,7 +225,9 @@ module Utils
 end
 ```
 
-Send a READ operation message to the server let it knows this message has been read. The bot will receive the duplicated message when the bot connected to server again if bot don't send response.
+Mixin Messenger支持的消息类型很多，具体可到下面链接查看:  [WebSocket消息类型](https://developers.mixin.one/api/beta-mixin-message/websocket-messages/).
+
+每接收到一个消息，需要按消息编号(message_id)给服务器回复一个"已读"的消息,避免服务器在机器人重新登入后，再次发送处理过的消息！
 ```ruby
 def self.GenerateReceipt(msgid)
   params = {
@@ -243,10 +247,9 @@ def self.GenerateReceipt(msgid)
   return data
 end
 ```
+### 完成
+现在你的机器人APP运行起来了，你打算如何改造你的机器人呢？
 
-Not only texts, images and other type message will be pushed to your bot. You can find more [details](https://developers.mixin.one/api/beta-mixin-message/websocket-messages/) about Messenger message.
+完整的代码[在这儿](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/websocket_mixin_bot.rb)
 
-### End
-Now your bot worked, you can hack it.
-
-Full code is [here](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/websocket_mixin_bot.rb)
+### 下一课[机器人接收与处理加密货币](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2-zhchs.md)
