@@ -4,7 +4,6 @@ require 'json'
 require 'zlib'
 require 'mixin_bot'
 require 'yaml'
-require './utils'
 
 yaml_hash = YAML.load_file('./config.yml')
 
@@ -28,25 +27,25 @@ EM.run {
 
   ws.on :open do |event|
     p [:open]
-    ws.send(Utils.ListPendingMsg)
+    ws.send(MixinBot.api.list_pending_message)
   end
 
   ws.on :message do |event|
     p [:message]
     data = event.data
-    io = StringIO.new(data.pack('c*'), 'rb')
-    gzip = Zlib::GzipReader.new io
-    msg = gzip.read
-    gzip.close
+    msg = MixinBot.api.read_message(data)
     jsmsg =  JSON.parse msg
-    p jsmsg
-    p jsmsg["data"]
+    # p jsmsg
+    # p jsmsg["data"]
     if jsmsg["action"] == "CREATE_MESSAGE" && jsmsg["data"] != nil
-      ws.send(Utils.GenerateReceipt(jsmsg["data"]["message_id"]))
+      msgid = jsmsg["data"]["message_id"]
+      ws.send(MixinBot.api.acknowledge_message_receipt(msgid))
       if jsmsg["data"]["category"] == "PLAIN_TEXT"
-        p Base64.decode64(jsmsg["data"]["data"])
-        replyMsg = Utils.SendPlainText(jsmsg["data"]["conversation_id"],Base64.decode64(jsmsg["data"]["data"]))
-        ws.send(replyMsg)
+        conversation_id = jsmsg["data"]["conversation_id"]
+        decoded_msg = Base64.decode64 jsmsg["data"]["data"]
+        p decoded_msg
+        reply_msg = MixinBot.api.plain_text_message(conversation_id, decoded_msg)
+        ws.send(reply_msg)
       end
       if jsmsg["data"]["category"] == "SYSTEM_ACCOUNT_SNAPSHOT"
         jsdata =  JSON.parse (Base64.decode64(jsmsg["data"]["data"]))
