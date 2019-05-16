@@ -9,7 +9,7 @@
 1. [创建一个机器人](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README-zhchs.md)
 
 ## 创建一个接受消息的机器人
-通过本教程，你将学会如何用PHP创建一个机器人APP,让它能接受消息.
+通过本教程，你将学会如何用Ruby创建一个机器人APP,让它能接受消息.
 
 ### Ruby 环境安装:
 本教程的程序基于 **Ruby** 开发.
@@ -66,7 +66,7 @@ mixin_labs-ruby-bot
 
 ### 生成相应的参数
 记下这些[生成的参数](https://mixin-network.gitbook.io/mixin-network/mixin-messenger-app/create-bot-account#generate-secure-parameter-for-your-app)
-它们将用于config.php中.
+它们将用于config.yml中.
 
 ![mixin_network-keys](https://github.com/wenewzhang/mixin_labs-php-bot/raw/master/mixin_network-keys.jpg)
 在项目目录下，创建config.yml,将生成的参数，替换成你的！
