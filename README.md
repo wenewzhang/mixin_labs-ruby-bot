@@ -106,7 +106,6 @@ require 'json'
 require 'zlib'
 require 'mixin_bot'
 require 'yaml'
-require './utils'
 
 yaml_hash = YAML.load_file('./config.yml')
 
@@ -130,25 +129,25 @@ EM.run {
 
   ws.on :open do |event|
     p [:open]
-    ws.send(Utils.ListPendingMsg)
+    ws.send(MixinBot.api.list_pending_message)
   end
 
   ws.on :message do |event|
     p [:message]
     data = event.data
-    io = StringIO.new(data.pack('c*'), 'rb')
-    gzip = Zlib::GzipReader.new io
-    msg = gzip.read
-    gzip.close
+    msg = MixinBot.api.read_message(data)
     jsmsg =  JSON.parse msg
-    p jsmsg
-    p jsmsg["data"]
+    # p jsmsg
+    # p jsmsg["data"]
     if jsmsg["action"] == "CREATE_MESSAGE" && jsmsg["data"] != nil
-      ws.send(Utils.GenerateReceipt(jsmsg["data"]["message_id"]))
+      msgid = jsmsg["data"]["message_id"]
+      ws.send(MixinBot.api.acknowledge_message_receipt(msgid))
       if jsmsg["data"]["category"] == "PLAIN_TEXT"
-        p Base64.decode64(jsmsg["data"]["data"])
-        replyMsg = Utils.SendPlainText(jsmsg["data"]["conversation_id"],Base64.decode64(jsmsg["data"]["data"]))
-        ws.send(replyMsg)
+        conversation_id = jsmsg["data"]["conversation_id"]
+        decoded_msg = Base64.decode64 jsmsg["data"]["data"]
+        p decoded_msg
+        reply_msg = MixinBot.api.plain_text_message(conversation_id, decoded_msg)
+        ws.send(reply_msg)
       end
       if jsmsg["data"]["category"] == "SYSTEM_ACCOUNT_SNAPSHOT"
         jsdata =  JSON.parse (Base64.decode64(jsmsg["data"]["data"]))
@@ -166,61 +165,6 @@ EM.run {
     ws = nil
   end
 }
-
-module Utils
-  def self.GenerateReceipt(msgid)
-    params = {
-      "message_id": msgid,
-      "status": "READ"
-    }
-    msg = {
-      "id":SecureRandom.uuid,
-      "action":"ACKNOWLEDGE_MESSAGE_RECEIPT",
-      "params":params
-    }
-    io = StringIO.new 'wb'
-    gzip = Zlib::GzipWriter.new io
-    gzip.write msg.to_json
-    gzip.close
-    data = io.string.unpack('c*')
-    return data
-  end
-
-  def self.ListPendingMsg
-    msg = {
-      "id": SecureRandom.uuid,
-      "action": "LIST_PENDING_MESSAGES"
-    }
-    io = StringIO.new 'wb'
-    gzip = Zlib::GzipWriter.new io
-    gzip.write msg.to_json
-    gzip.close
-    data = io.string.unpack('c*')
-    return data
-  end
-
-  def self.SendPlainText(conid,content)
-    params = {
-      "conversation_id":conid,
-      'category':'PLAIN_TEXT',
-      'status':'SENT',
-      'message_id':SecureRandom.uuid,
-      'data':Base64.encode64(content)
-      }
-    msg = {
-      'id':SecureRandom.uuid,
-      'action':'CREATE_MESSAGE',
-      'params':params
-      }
-      io = StringIO.new 'wb'
-      gzip = Zlib::GzipWriter.new io
-      gzip.write msg.to_json
-      gzip.close
-      data = io.string.unpack('c*')
-      return data
-  end
-
-end
 ```
 
 Run the code
@@ -242,23 +186,7 @@ Not only texts, images and other type message will be pushed to your bot. You ca
 ### Source code summary
 Send a READ operation message to the server let it knows this message has been read. The bot will receive the duplicated message when the bot connected to server again if bot don't send response.
 ```ruby
-def self.GenerateReceipt(msgid)
-  params = {
-    "message_id": msgid,
-    "status": "READ"
-  }
-  msg = {
-    "id":SecureRandom.uuid,
-    "action":"ACKNOWLEDGE_MESSAGE_RECEIPT",
-    "params":params
-  }
-  io = StringIO.new 'wb'
-  gzip = Zlib::GzipWriter.new io
-  gzip.write msg.to_json
-  gzip.close
-  data = io.string.unpack('c*')
-  return data
-end
+ws.send(MixinBot.api.acknowledge_message_receipt(msgid))
 ```
 
 ### End
