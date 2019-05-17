@@ -2,7 +2,7 @@ require 'faye/websocket'
 require 'eventmachine'
 require 'json'
 require 'zlib'
-require 'mixin_bot'
+require '../mixin_bot/lib/mixin_bot'
 require 'yaml'
 
 yaml_hash = YAML.load_file('./config.yml')
@@ -56,20 +56,32 @@ EM.run {
              "6cfe566e-4aad-470b-8c9a-2fd35b49c68d" +
              "&amount=0.001" + "&trace=" + SecureRandom.uuid +
              "&memo="
-          # $payLinkBTC = "https://mixin.one/pay?recipient=".
-          #               "a1ce2967-a534-417d-bf12-c86571e4eefa"."&asset=".
-          #               "c6d0c728-2624-429b-8e0d-d9d19b6592fa".
-          #               "&amount=0.0001"."&trace=".Uuid::uuid4()->toString().
-          #               "&memo=";
-          buttons = MixinBot.api.
+
+          payLinkEOS = "https://mixin.one/pay?recipient=" +
+             MixinBot.client_id + "&asset=" +
+             "6cfe566e-4aad-470b-8c9a-2fd35b49c68d" +
+             "&amount=0.001" + "&trace=" + SecureRandom.uuid +
+             "&memo="
+          payLinkBTC = "https://mixin.one/pay?recipient=" +
+                       MixinBot.client_id + "&asset=" +
+                       "c6d0c728-2624-429b-8e0d-d9d19b6592fa" +
+                       "&amount=0.0001" + "&trace=" + SecureRandom.uuid +
+                       "&memo="
+          button1 = {
+                    label: "Pay 0.001 EOS",
+                    color:  "#FFABAB",
+                    action: payLinkEOS
+                    }
+          button2 = {
+                    label: "Pay 0.0001 BTC",
+                    color:  "#00EEFF",
+                    action: payLinkBTC
+                    }
+          buttons = [button1,button2]
+          ws.send(MixinBot.api.
                       app_button_group_message(conversation_id,
                                               jsmsg["data"]["user_id"],
-                                            {
-                                              label: "Pay 0.001 EOS",
-                                              color:  "#FFABAB",
-                                              action: payLinkEOS
-                                            })
-           ws.send(buttons)
+                                              buttons))
            p "send app button group"
         else
           reply_msg = MixinBot.api.plain_text_message(conversation_id,decoded_msg)
