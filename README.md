@@ -1,5 +1,5 @@
 # Ruby Bitcoin tutorial based on Mixin Network
-![](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/Bitcoin_php.jpg)
+![](https://github.com/wenewzhang/mixin_labs-ruby-bot/raw/master/ruby-btc.jpg)
 A Mixin messenger bot will be created in this tutorial. The bot is powered by Ruby and echo message and Bitcoin from user.
 
 [Mixin network resource](https://github.com/awesome-mixin-network/index_of_Mixin_Network_resource)
