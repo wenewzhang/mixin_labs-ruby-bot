@@ -49,8 +49,21 @@ EM.run {
           reply_msg = MixinBot.api.plain_text_message(conversation_id,reply_msg)
           ws.send(reply_msg)
         elsif (decoded_msg == "1")
-          p "send app card"
-        elsif (decoded_msg == "2")
+          payLinkEOS = "https://mixin.one/pay?recipient=" +
+             "a1ce2967-a534-417d-bf12-c86571e4eefa" + "&asset=" +
+             "6cfe566e-4aad-470b-8c9a-2fd35b49c68d" +
+             "&amount=0.001" + "&trace=" + SecureRandom.uuid +
+             "&memo="
+          msgData = {
+                       'icon_url':"https://mixin.one/assets/98b586edb270556d1972112bd7985e9e.png",
+                       'title':"Pay 0.001 EOS",
+                       'description':"pay",
+                       'action':payLinkEOS
+                     }
+          ws.send(MixinBot.api.
+                  app_card_message(conversation_id,
+                                    msgData))
+        elsif decoded_msg == "2"
           payLinkEOS = "https://mixin.one/pay?recipient=" +
              "a1ce2967-a534-417d-bf12-c86571e4eefa" + "&asset=" +
              "6cfe566e-4aad-470b-8c9a-2fd35b49c68d" +
