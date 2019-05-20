@@ -5,12 +5,10 @@ A Mixin messenger bot will be created in this tutorial. The bot is powered by Ru
 [Mixin network resource](https://github.com/awesome-mixin-network/index_of_Mixin_Network_resource)
 
 ## What you will learn from this tutorial
-1. [How to create bot in Mixin messenger and reply message to user](https://github.com/wenewzhang/mixin_labs-ruby-bot#create-bot-and-receive-message-from-user)| [Chinese](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README-zhchs.md)
-2.[How to receive Bitcoin and send Bitcoin in Mixin Messenger](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2.md)| [Chinese](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2-zhchs.md)
-<!-- 3. [Create Bitcoin wallet, read balance and send Bitcoin by PHP based on Mixin Network](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README3.md)| [Chinese](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README3-zhchs.md)
-4. [How to trade bitcoin through PHP language: Pay to ExinCore](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README4.md) |  [Chinese](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README4-zhchs.md)
-5. [How to trade bitcoin through PHP: List your order on Ocean.One](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README5.md) | [Chinese](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README5-zhchs.md)
-6. [How to trade ERC-20 compliant coins on OceanOne through PHP](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README6.md) | [Chinese](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README6-zhchs.md) -->
+ 1. [How to create bot in Mixin messenger and reply message to user](https://github.com/wenewzhang/mixin_labs-ruby-bot#create-bot-and-receive-message-from-user)| [Chinese](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README-zhchs.md)
+
+ 2. [How to receive Bitcoin and send Bitcoin in Mixin Messenger](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2.md)| [Chinese](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2-zhchs.md)
+
 
 ## Create bot in Mixin messenger and reply message to user
 ### Ruby environment setup:
