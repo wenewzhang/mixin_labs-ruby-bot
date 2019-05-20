@@ -1,7 +1,7 @@
 # Ruby Bitcoin tutorial based on Mixin Network II: Receive and send Bitcoin in Mixin Messenger
 ![](https://github.com/wenewzhang/mixin_labs-ruby-bot/raw/master/ruby-btc.jpg)
 
-In [the previous chapter](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README.md), your first bot just work. The bot echo message from user.
+In [the previous chapter](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README.md), your first bot just work. The bot echo message from user. The bot can receive Bitcoin and send Bitcoin back to user after we write some code.
 
 Create an websocket_mixin_bot.rb file with following code:
 ```ruby

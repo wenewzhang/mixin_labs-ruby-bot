@@ -1,5 +1,5 @@
 
-# 基于Mixin Network的 Ruby 比特币开发教程: 机器人接受比特币并立即退还用户
+# Ruby 比特币开发教程: 机器人接受比特币并立即退还用户
 ![](https://github.com/wenewzhang/mixin_labs-ruby-bot/raw/master/ruby-btc.jpg)
 
 在 [上一篇教程中](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README-zhchs.md), 我们创建了自动回复消息的机器人,当用户发送消息"Hello,World!"时，机器人会自动回复同一条消息!
