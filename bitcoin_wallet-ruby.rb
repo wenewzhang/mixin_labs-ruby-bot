@@ -134,6 +134,23 @@ loop do
     addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
     p addressInfo2
   end
+  if cmd == "we"
+    table = CSV.read(WALLET_NAME)
+    MixinBot.client_id = table[0][3]
+    MixinBot.session_id = table[0][2]
+    MixinBot.pin_token = table[0][1]
+    MixinBot.private_key = table[0][0]
+    addressInfo = MixinBot.api.create_withdraw_address(EOS_ASSET_ID,
+                                                         DEFAULT_PIN,
+                                                         "",
+                                                         EOS_THIRD_EXCHANGE_NAME,
+                                                         EOS_THIRD_EXCHANGE_TAG,
+                                                         "from ruby")
+    p addressInfo
+    p "The address id is " + addressInfo["data"]["address_id"] + " it is needed by read fee!"
+    addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
+    p addressInfo2
+  end
   if cmd == "q"
     break
   end
