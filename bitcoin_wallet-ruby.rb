@@ -4,6 +4,7 @@ require 'yaml'
 require 'csv'
 
 WALLET_NAME      = "./mybitcoin_wallet.csv"
+DEFAULT_PIN      = "123456"
 EXIN_BOT         = "61103d28-3ac2-44a2-ae34-bd956070dab1"
 OCEANONE_BOT     = "aaff5bef-42fb-4c9f-90e0-29f69176b7d4"
 BTC_ASSET_ID     = "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
@@ -24,7 +25,7 @@ EOS_ASSET_ID     = "6cfe566e-4aad-470b-8c9a-2fd35b49c68d"
 # private static final String XIN_ASSET_ID     = "c94ac88f-4671-3976-b60a-09064f1811e8";
 # private static final String CNB_ASSET_ID     = "965e5c6e-434c-3fa9-b780-c50f43cd955c";
 # private static final String ERC20_BENZ       = "2b9c216c-ef60-398d-a42a-eba1b298581d";
-# private static final String BTC_WALLET_ADDR  = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C";
+BTC_WALLET_ADDR  = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C"
 # private static final String MASTER_UUID      = "0b4f49dc-8fb4-4539-9a89-fb3afc613747";
 # private static final String WALLET_FILANAME  = "./mybitcoin_wallet.csv";
 EOS_THIRD_EXCHANGE_NAME = "huobideposit"
@@ -116,6 +117,19 @@ loop do
     MixinBot.private_key = table[0][0]
     botAssetsInfo = MixinBot.api.read_asset(EOS_ASSET_ID)
     p botAssetsInfo
+  end
+  if cmd == "wb"
+    table = CSV.read(WALLET_NAME)
+    MixinBot.client_id = table[0][3]
+    MixinBot.session_id = table[0][2]
+    MixinBot.pin_token = table[0][1]
+    MixinBot.private_key = table[0][0]
+    addressInfo = MixinBot.api.create_withdraw_address(BTC_ASSET_ID,
+                                                         DEFAULT_PIN,
+                                                         BTC_WALLET_ADDR,
+                                                         "","",
+                                                         "from ruby")
+    p addressInfo
   end
   if cmd == "q"
     break
