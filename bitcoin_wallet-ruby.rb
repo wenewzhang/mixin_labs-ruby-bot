@@ -133,6 +133,12 @@ loop do
     p "The address id is " + addressInfo["data"]["address_id"] + " it is needed by read fee!"
     addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
     p addressInfo2
+
+    # withdrawInfo = MixinBot.api.withdrawals(addressInfo["data"]["address_id"],
+    #                                         DEFAULT_PIN,
+    #                                         "0.1",
+    #                                         SecureRandom.uuid,"from ruby")
+    # p withdrawInfo
   end
   if cmd == "we"
     table = CSV.read(WALLET_NAME)
@@ -148,8 +154,13 @@ loop do
                                                          "from ruby")
     p addressInfo
     p "The address id is " + addressInfo["data"]["address_id"] + " it is needed by read fee!"
-    addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
-    p addressInfo2
+    # addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
+    # p addressInfo2
+    # withdrawInfo = MixinBot.api.withdrawals(addressInfo["data"]["address_id"],
+    #                                         DEFAULT_PIN,
+    #                                         "0.1",
+    #                                         SecureRandom.uuid,"from ruby")
+    # p withdrawInfo
   end
   if cmd == "q"
     break
