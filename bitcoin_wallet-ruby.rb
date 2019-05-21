@@ -97,8 +97,8 @@ loop do
     MixinBot.private_key = table[0][0]
     botAssetsInfo = MixinBot.api.read_assets()
     p botAssetsInfo
-    # pinInfo = MixinBot.api.update_pin('',"123456")
-    # p pinInfo
+    pinInfo = MixinBot.api.update_pin('',DEFAULT_PIN)
+    p pinInfo
   end
   if cmd == "2"
     table = CSV.read(WALLET_NAME)
@@ -131,7 +131,7 @@ loop do
                                                          "from ruby")
     p addressInfo
     p "The address id is " + addressInfo["data"]["address_id"] + " it is needed by read fee!"
-    addressInfo2 = MixinBot.api.get_withdraw_address(addressInfo["data"]["address_id"])
+    addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
     p addressInfo2
   end
   if cmd == "q"
