@@ -130,6 +130,9 @@ loop do
                                                          "","",
                                                          "from ruby")
     p addressInfo
+    p "The address id is " + addressInfo["data"]["address_id"] + " it is needed by read fee!"
+    addressInfo2 = MixinBot.api.get_withdraw_address(addressInfo["data"]["address_id"])
+    p addressInfo2
   end
   if cmd == "q"
     break
