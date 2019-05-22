@@ -41,7 +41,29 @@ PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance &
              "5: Pay 0.0001 BTC to ExinCore buy USDT\n6: Pay $1 USDT to ExinCore buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n" +
              "v: Verify Wallet Pin\nwb: Withdraw BTC\nwe: WitchDraw EOS\nab: Read Bot Assets\naw: Read Wallet Assets\n" +
              "o: Ocean.One Exchange\nq: Exit \nMake your choose(eg: q for Exit!): "
-p     MixinBot.client_id
+
+yaml_hash = YAML.load_file('./config.yml')
+bot_config = {
+               client_id: yaml_hash["MIXIN_CLIENT_ID"],
+               session_id: yaml_hash["MIXIN_SESSION_ID"],
+               client_secret: yaml_hash["MIXIN_CLIENT_SECRET"],
+               pin_token:    yaml_hash["MIXIN_PIN_TOKEN"],
+               private_key: yaml_hash["MIXIN_PRIVATE_KEY"]
+               }
+botAccount = MixinBot.new(bot_config)
+
+if File.file?(WALLET_NAME)
+  table = CSV.read(WALLET_NAME)
+  wallet_config = {
+                 client_id: table[0][3],
+                 session_id: table[0][2],
+                 client_secret: '',
+                 pin_token:    table[0][1],
+                 private_key: table[0][0]
+                 }
+  walletAccount = MixinBot.new(wallet_config)
+  wallet_userid = table[0][3]
+end
 
 loop do
   puts "-------------------------------------------------------------------------"
@@ -52,22 +74,13 @@ loop do
       p "mybitcoin_wallet.csv has already existed !"
       next
     end
-    yaml_hash = YAML.load_file('./config.yml')
-
-    MixinBot.client_id  = yaml_hash["MIXIN_CLIENT_ID"]
-    MixinBot.session_id = yaml_hash["MIXIN_SESSION_ID"]
-    MixinBot.client_secret = yaml_hash["MIXIN_CLIENT_SECRET"]
-    MixinBot.pin_token   = yaml_hash["MIXIN_PIN_TOKEN"]
-    MixinBot.private_key = yaml_hash["MIXIN_PRIVATE_KEY"]
-
-    access_token = MixinBot.api.access_token("GET","/","")
 
     rsa_key = OpenSSL::PKey::RSA.new(1024)
     private_key = rsa_key.to_pem()
     p private_key
     public_key = rsa_key.public_key.to_pem
     secret_client = public_key.sub("-----BEGIN PUBLIC KEY-----\n","").sub("\n-----END PUBLIC KEY-----\n","")
-    reqInfo = MixinBot.api.create_user("ruby bot",secret_client)
+    reqInfo = botAccount.create_user("ruby bot",secret_client)
     p reqInfo["data"]["pin_token"]
     p reqInfo["data"]["user_id"]
     p reqInfo["data"]["session_id"]
@@ -77,44 +90,19 @@ loop do
       csv << [private_key, reqInfo["data"]["pin_token"], reqInfo["data"]["session_id"], reqInfo["data"]["user_id"]]
     end
 
-    botAssetsInfo = MixinBot.api.read_assets()
-    p botAssetsInfo
-
-    MixinBot.client_id  = reqInfo["data"]["user_id"]
-    MixinBot.session_id = reqInfo["data"]["session_id"]
-    MixinBot.client_secret = ""
-    MixinBot.pin_token   = reqInfo["data"]["pin_token"]
-    MixinBot.private_key = private_key
-    p "--------------------------------"
-    botAssetsInfo2 = MixinBot.api.read_assets()
-    p botAssetsInfo2
   end
   if cmd == "aw"
-    table = CSV.read(WALLET_NAME)
-    puts table[0][1]
-    MixinBot.client_id = table[0][3]
-    MixinBot.session_id = table[0][2]
-    MixinBot.pin_token = table[0][1]
-    MixinBot.private_key = table[0][0]
-    botAssetsInfo = MixinBot.api.read_assets()
+    assetsInfo = walletAccount.read_assets()
     p "--------The Wallet Assets List-----------------"
-    botAssetsInfo["data"].each { |x| puts x["symbol"] + " " +
+    assetsInfo["data"].each { |x| puts x["symbol"] + " " +
                                 x["balance"] + " " + x["public_key"] +
                                 x["account_name"] + " " + x["account_tag"]}
     p "----------End of Wallet Assets --------------"
   end
   if cmd == "ab"
-    table = CSV.read(WALLET_NAME)
-    yaml_hash = YAML.load_file('./config.yml')
-
-    MixinBot.client_id  = yaml_hash["MIXIN_CLIENT_ID"]
-    MixinBot.session_id = yaml_hash["MIXIN_SESSION_ID"]
-    MixinBot.client_secret = yaml_hash["MIXIN_CLIENT_SECRET"]
-    MixinBot.pin_token   = yaml_hash["MIXIN_PIN_TOKEN"]
-    MixinBot.private_key = yaml_hash["MIXIN_PRIVATE_KEY"]
-    botAssetsInfo = MixinBot.api.read_assets()
+    assetsInfo = botAccount.read_assets()
     p "--------The Bot Assets List-----------------"
-    botAssetsInfo["data"].each { |x| puts x["symbol"] + " " +
+    assetsInfo["data"].each { |x| puts x["symbol"] + " " +
                                 x["balance"] + " " + x["public_key"] +
                                 x["account_name"] + " " + x["account_tag"]}
     p "----------End of Bot Assets --------------"
@@ -122,56 +110,34 @@ loop do
     # p pinInfo
   end
   if cmd == "2"
-    table = CSV.read(WALLET_NAME)
-    MixinBot.client_id = table[0][3]
-    MixinBot.session_id = table[0][2]
-    MixinBot.pin_token = table[0][1]
-    MixinBot.private_key = table[0][0]
-    botAssetsInfo = MixinBot.api.read_asset(BTC_ASSET_ID)
-    p botAssetsInfo
-    p "The BTC wallet address is " + botAssetsInfo["data"]["public_key"]
-    p "The BTC wallet balance is " + botAssetsInfo["data"]["balance"]
+    assetsInfo = walletAccount.read_asset(BTC_ASSET_ID)
+    p "The BTC wallet address is " + assetsInfo["data"]["public_key"]
+    p "The BTC wallet balance is " + assetsInfo["data"]["balance"]
   end
   if cmd == "3"
-    table = CSV.read(WALLET_NAME)
-    MixinBot.client_id = table[0][3]
-    MixinBot.session_id = table[0][2]
-    MixinBot.pin_token = table[0][1]
-    MixinBot.private_key = table[0][0]
-    botAssetsInfo = MixinBot.api.read_asset(EOS_ASSET_ID)
-    p botAssetsInfo
-    p "The EOS wallet address is " + botAssetsInfo["data"]["account_name"] + " " + botAssetsInfo["data"]["account_tag"]
-    p "The EOS wallet balance is " + botAssetsInfo["data"]["balance"]
+    assetsInfo = walletAccount.read_asset(BTC_ASSET_ID)
+    p "The EOS wallet address is " + assetsInfo["data"]["account_name"] + " " + assetsInfo["data"]["account_tag"]
+    p "The EOS wallet balance is " + assetsInfo["data"]["balance"]
   end
   if cmd == "wb"
-    table = CSV.read(WALLET_NAME)
-    MixinBot.client_id = table[0][3]
-    MixinBot.session_id = table[0][2]
-    MixinBot.pin_token = table[0][1]
-    MixinBot.private_key = table[0][0]
-    addressInfo = MixinBot.api.create_withdraw_address(BTC_ASSET_ID,
+    addressInfo = walletAccount.create_withdraw_address(BTC_ASSET_ID,
                                                          DEFAULT_PIN,
                                                          BTC_WALLET_ADDR,
                                                          "","",
                                                          "from ruby")
     p addressInfo
     p "The address id is " + addressInfo["data"]["address_id"] + " it is needed by read fee!"
-    addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
-    p addressInfo2
+    # addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
+    # p addressInfo2
 
-    # withdrawInfo = MixinBot.api.withdrawals(addressInfo["data"]["address_id"],
-    #                                         DEFAULT_PIN,
-    #                                         "0.1",
-    #                                         SecureRandom.uuid,"from ruby")
-    # p withdrawInfo
+    withdrawInfo = walletAccount.withdrawals(addressInfo["data"]["address_id"],
+                                            DEFAULT_PIN,
+                                            "0.1",
+                                            SecureRandom.uuid,"from ruby")
+    p withdrawInfo
   end
   if cmd == "we"
-    table = CSV.read(WALLET_NAME)
-    MixinBot.client_id = table[0][3]
-    MixinBot.session_id = table[0][2]
-    MixinBot.pin_token = table[0][1]
-    MixinBot.private_key = table[0][0]
-    addressInfo = MixinBot.api.create_withdraw_address(EOS_ASSET_ID,
+    addressInfo = walletAccount.create_withdraw_address(EOS_ASSET_ID,
                                                          DEFAULT_PIN,
                                                          "",
                                                          EOS_THIRD_EXCHANGE_NAME,
@@ -181,25 +147,16 @@ loop do
     p "The address id is " + addressInfo["data"]["address_id"] + " it is needed by read fee!"
     # addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
     # p addressInfo2
-    # withdrawInfo = MixinBot.api.withdrawals(addressInfo["data"]["address_id"],
-    #                                         DEFAULT_PIN,
-    #                                         "0.1",
-    #                                         SecureRandom.uuid,"from ruby")
-    # p withdrawInfo
+    withdrawInfo = walletAccount.withdrawals(addressInfo["data"]["address_id"],
+                                            DEFAULT_PIN,
+                                            "0.1",
+                                            SecureRandom.uuid,"from ruby")
+    p withdrawInfo
   end
   if cmd == "teb"
-    yaml_hash = YAML.load_file('./config.yml')
-
-    MixinBot.client_id  = yaml_hash["MIXIN_CLIENT_ID"]
-    MixinBot.session_id = yaml_hash["MIXIN_SESSION_ID"]
-    MixinBot.client_secret = yaml_hash["MIXIN_CLIENT_SECRET"]
-    MixinBot.pin_token   = yaml_hash["MIXIN_PIN_TOKEN"]
-    MixinBot.private_key = yaml_hash["MIXIN_PRIVATE_KEY"]
-    table = CSV.read(WALLET_NAME)
-    wallet_userid = table[0][3]
-    botAssetsInfo = MixinBot.api.read_asset(EOS_ASSET_ID)
+    botAssetsInfo = botAccount.read_asset(EOS_ASSET_ID)
     if botAssetsInfo["data"]["balance"].to_f > 0
-      transInfo = MixinBot.api.create_transfer(MixinBot.api.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
+      transInfo = botAccount.create_transfer(botAccount.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
                                         {
                                           asset_id: EOS_ASSET_ID,
                                           opponent_id: wallet_userid,
@@ -211,18 +168,9 @@ loop do
    end
   end
   if cmd == "tcb"
-    yaml_hash = YAML.load_file('./config.yml')
-
-    MixinBot.client_id  = yaml_hash["MIXIN_CLIENT_ID"]
-    MixinBot.session_id = yaml_hash["MIXIN_SESSION_ID"]
-    MixinBot.client_secret = yaml_hash["MIXIN_CLIENT_SECRET"]
-    MixinBot.pin_token   = yaml_hash["MIXIN_PIN_TOKEN"]
-    MixinBot.private_key = yaml_hash["MIXIN_PRIVATE_KEY"]
-    table = CSV.read(WALLET_NAME)
-    wallet_userid = table[0][3]
-    botAssetsInfo = MixinBot.api.read_asset(CNB_ASSET_ID)
+    botAssetsInfo = botAccount.read_asset(CNB_ASSET_ID)
     if botAssetsInfo["data"]["balance"].to_f > 0
-      transInfo = MixinBot.api.create_transfer(MixinBot.api.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
+      transInfo = botAccount.create_transfer(botAccount.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
                                         {
                                           asset_id: CNB_ASSET_ID,
                                           opponent_id: wallet_userid,
