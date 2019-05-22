@@ -26,7 +26,7 @@ EOS_ASSET_ID     = "6cfe566e-4aad-470b-8c9a-2fd35b49c68d"
 CNB_ASSET_ID     = "965e5c6e-434c-3fa9-b780-c50f43cd955c"
 # private static final String ERC20_BENZ       = "2b9c216c-ef60-398d-a42a-eba1b298581d";
 BTC_WALLET_ADDR  = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C"
-# private static final String MASTER_UUID      = "0b4f49dc-8fb4-4539-9a89-fb3afc613747";
+MASTER_UUID      = "0b4f49dc-8fb4-4539-9a89-fb3afc613747"
 # private static final String WALLET_FILANAME  = "./mybitcoin_wallet.csv";
 EOS_THIRD_EXCHANGE_NAME = "huobideposit"
 EOS_THIRD_EXCHANGE_TAG  = "1872050"
@@ -89,7 +89,20 @@ loop do
     CSV.open(WALLET_NAME, "wb") do |csv|
       csv << [private_key, reqInfo["data"]["pin_token"], reqInfo["data"]["session_id"], reqInfo["data"]["user_id"]]
     end
-
+    if File.file?(WALLET_NAME)
+      table = CSV.read(WALLET_NAME)
+      wallet_config = {
+                     client_id: table[0][3],
+                     session_id: table[0][2],
+                     client_secret: '',
+                     pin_token:    table[0][1],
+                     private_key: table[0][0]
+                     }
+      walletAccount = MixinBot.new(wallet_config)
+      wallet_userid = table[0][3]
+      pinInfo = walletAccount.update_pin('',DEFAULT_PIN)
+      p pinInfo
+    end
   end
   if cmd == "aw"
     assetsInfo = walletAccount.read_assets()
@@ -175,6 +188,20 @@ loop do
                                           asset_id: CNB_ASSET_ID,
                                           opponent_id: wallet_userid,
                                           amount: botAssetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
+  if cmd == "tcm"
+    assetsInfo = walletAccount.read_asset(CNB_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: CNB_ASSET_ID,
+                                          opponent_id: MASTER_UUID,
+                                          amount: assetsInfo["data"]["balance"],
                                           trace_id: SecureRandom.uuid,
                                           memo: "from ruby"
                                         })
