@@ -8,6 +8,10 @@
 ## 课程简介
 1. [创建一个机器人](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README-zhchs.md)
 
+2. [Ruby比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2-zhchs.md)
+
+3. [Ruby比特币开发教程: 创建比特币钱包](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README3-zhchs.md)
+
 ## 创建一个接受消息的机器人
 通过本教程，你将学会如何用Ruby创建一个机器人APP,让它能接受消息.
 

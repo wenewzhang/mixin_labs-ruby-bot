@@ -9,6 +9,7 @@ A Mixin messenger bot will be created in this tutorial. The bot is powered by Ru
 
  2. [How to receive Bitcoin and send Bitcoin in Mixin Messenger](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2.md)| [Chinese](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2-zhchs.md)
 
+ 3. [How to create a Bitcoin wallet based on Mixin Network API](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README3.md) | [Chinese](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README3-zhchs.md)
 
 ## Create bot in Mixin messenger and reply message to user
 ### Ruby environment setup:

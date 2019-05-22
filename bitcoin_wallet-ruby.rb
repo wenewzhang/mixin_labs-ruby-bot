@@ -198,7 +198,7 @@ loop do
     table = CSV.read(WALLET_NAME)
     wallet_userid = table[0][3]
     botAssetsInfo = MixinBot.api.read_asset(EOS_ASSET_ID)
-    if botAssetsInfo["data"]["balance"] > 0
+    if botAssetsInfo["data"]["balance"].to_f > 0
       transInfo = MixinBot.api.create_transfer(MixinBot.api.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
                                         {
                                           asset_id: EOS_ASSET_ID,
