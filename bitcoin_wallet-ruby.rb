@@ -108,6 +108,8 @@ loop do
     MixinBot.private_key = table[0][0]
     botAssetsInfo = MixinBot.api.read_asset(BTC_ASSET_ID)
     p botAssetsInfo
+    p "The BTC wallet address is " + botAssetsInfo["data"]["public_key"]
+    p "The BTC wallet balance is " + botAssetsInfo["data"]["balance"]
   end
   if cmd == "3"
     table = CSV.read(WALLET_NAME)
@@ -117,6 +119,8 @@ loop do
     MixinBot.private_key = table[0][0]
     botAssetsInfo = MixinBot.api.read_asset(EOS_ASSET_ID)
     p botAssetsInfo
+    p "The EOS wallet address is " + botAssetsInfo["data"]["account_name"] + " " + botAssetsInfo["data"]["account_tag"]
+    p "The EOS wallet balance is " + botAssetsInfo["data"]["balance"]
   end
   if cmd == "wb"
     table = CSV.read(WALLET_NAME)
