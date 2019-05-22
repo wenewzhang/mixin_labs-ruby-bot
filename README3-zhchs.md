@@ -1,4 +1,4 @@
-# 基于Mixin Network的 Ruby 比特币开发教程: 创建比特币钱包
+# Ruby 比特币开发教程: 创建比特币钱包
 ![](https://github.com/wenewzhang/mixin_labs-ruby-bot/raw/master/ruby-btc.jpg)
 
 我们已经创建过一个[回复消息](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README-zhchs.md)的机器人和一个能自动[支付比特币](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2-zhchs.md)的机器人.
