@@ -3,6 +3,9 @@ require '../mixin_bot/lib/mixin_bot'
 require 'yaml'
 require 'csv'
 require './utils'
+require 'msgpack'
+require 'base64'
+require 'uuid'
 
 WALLET_NAME      = "./mybitcoin_wallet.csv"
 DEFAULT_PIN      = "123456"
@@ -214,6 +217,36 @@ loop do
   end
   if cmd == "9"
     Utils.ExinCoreMarketPriceRequest(BTC_ASSET_ID)
+  end
+  if cmd == "5"
+    memo = Base64.encode64(MessagePack.pack({
+    'A' => UUID.parse(USDT_ASSET_ID).to_raw
+    }))
+    p memo
+    transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                      {
+                                        asset_id: BTC_ASSET_ID,
+                                        opponent_id: EXIN_BOT,
+                                        amount: "0.0001",
+                                        trace_id: SecureRandom.uuid,
+                                        memo: memo
+                                      })
+     p transInfo
+  end
+  if cmd == "6"
+    memo = Base64.encode64(MessagePack.pack({
+    'A' => UUID.parse(BTC_ASSET_ID).to_raw
+    }))
+    p memo
+    transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                      {
+                                        asset_id: USDT_ASSET_ID,
+                                        opponent_id: EXIN_BOT,
+                                        amount: "1",
+                                        trace_id: SecureRandom.uuid,
+                                        memo: memo
+                                      })
+     p transInfo
   end
   if cmd == "q"
     break
