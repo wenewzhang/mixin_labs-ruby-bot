@@ -6,6 +6,7 @@ require './utils'
 require 'msgpack'
 require 'base64'
 require 'uuid'
+require 'cgi'
 
 WALLET_NAME      = "./mybitcoin_wallet.csv"
 DEFAULT_PIN      = "123456"
@@ -212,6 +213,62 @@ loop do
       p transInfo
    end
   end
+  if cmd == "tub"
+    botAssetsInfo = botAccount.read_asset(USDT_ASSET_ID)
+    if botAssetsInfo["data"]["balance"].to_f > 0
+      transInfo = botAccount.create_transfer(botAccount.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
+                                        {
+                                          asset_id: USDT_ASSET_ID,
+                                          opponent_id: wallet_userid,
+                                          amount: botAssetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
+  if cmd == "tum"
+    assetsInfo = walletAccount.read_asset(USDT_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: USDT_ASSET_ID,
+                                          opponent_id: MASTER_UUID,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
+  if cmd == "tbb"
+    botAssetsInfo = botAccount.read_asset(BTC_ASSET_ID)
+    if botAssetsInfo["data"]["balance"].to_f > 0
+      transInfo = botAccount.create_transfer(botAccount.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
+                                        {
+                                          asset_id: BTC_ASSET_ID,
+                                          opponent_id: wallet_userid,
+                                          amount: botAssetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
+  if cmd == "tbm"
+    assetsInfo = walletAccount.read_asset(BTC_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: BTC_ASSET_ID,
+                                          opponent_id: MASTER_UUID,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
   if cmd == "8"
     Utils.ExinCoreMarketPriceRequest(USDT_ASSET_ID)
   end
@@ -219,9 +276,10 @@ loop do
     Utils.ExinCoreMarketPriceRequest(BTC_ASSET_ID)
   end
   if cmd == "5"
-    memo = Base64.encode64(MessagePack.pack({
+    memo1 = Base64.encode64(MessagePack.pack({
     'A' => UUID.parse(USDT_ASSET_ID).to_raw
     }))
+    memo = memo1.sub("\n","")
     p memo
     transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
                                       {
@@ -234,9 +292,10 @@ loop do
      p transInfo
   end
   if cmd == "6"
-    memo = Base64.encode64(MessagePack.pack({
+    memo1 = Base64.encode64(MessagePack.pack({
     'A' => UUID.parse(BTC_ASSET_ID).to_raw
     }))
+    memo = memo1.sub("\n","")
     p memo
     transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
                                       {
@@ -247,6 +306,22 @@ loop do
                                         memo: memo
                                       })
      p transInfo
+  end
+  if cmd == "7"
+    if wallet_userid == "5e4ad097-21e8-3f6b-98f7-9dc74dd99f77"
+      dt = "2019-05-23T09:48:00.774245874Z"
+    else
+      puts "Input the snapshots datetime: "
+      dt = gets.chomp
+    end
+    p CGI.escape(dt)
+    snaps = walletAccount.read_snapshots({
+                                        limit: 10,
+                                        offset: CGI.escape(dt),
+                                        asset: BTC_ASSET_ID,
+                                        order: "ASC"
+                                        })
+    p snaps["data"]
   end
   if cmd == "q"
     break
