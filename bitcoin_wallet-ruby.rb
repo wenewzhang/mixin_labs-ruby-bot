@@ -2,6 +2,7 @@ require 'openssl'
 require '../mixin_bot/lib/mixin_bot'
 require 'yaml'
 require 'csv'
+require './utils'
 
 WALLET_NAME      = "./mybitcoin_wallet.csv"
 DEFAULT_PIN      = "123456"
@@ -10,7 +11,7 @@ OCEANONE_BOT     = "aaff5bef-42fb-4c9f-90e0-29f69176b7d4"
 BTC_ASSET_ID     = "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
 
 EOS_ASSET_ID     = "6cfe566e-4aad-470b-8c9a-2fd35b49c68d"
-# private static final String USDT_ASSET_ID    = "815b0b1a-2764-3736-8faa-42d694fa620a";
+USDT_ASSET_ID    = "815b0b1a-2764-3736-8faa-42d694fa620a"
 # private static final String ETC_ASSET_ID     = "2204c1ee-0ea2-4add-bb9a-b3719cfff93a";
 # private static final String XRP_ASSET_ID     = "23dfb5a5-5d7b-48b6-905f-3970e3176e27";
 # private static final String XEM_ASSET_ID     = "27921032-f73e-434e-955f-43d55672ee31";
@@ -207,6 +208,12 @@ loop do
                                         })
       p transInfo
    end
+  end
+  if cmd == "8"
+    Utils.ExinCoreMarketPriceRequest(USDT_ASSET_ID)
+  end
+  if cmd == "9"
+    Utils.ExinCoreMarketPriceRequest(BTC_ASSET_ID)
   end
   if cmd == "q"
     break
