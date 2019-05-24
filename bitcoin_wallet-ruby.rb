@@ -309,14 +309,14 @@ loop do
   end
   if cmd == "7"
     if wallet_userid == "5e4ad097-21e8-3f6b-98f7-9dc74dd99f77"
-      dt = "2019-05-23T09:48:00.774245874Z"
+      dt = "2019-05-23T09:48:04.582099Z"
     else
       puts "Input the snapshots datetime: "
       dt = gets.chomp
     end
     p CGI.escape(dt)
     snaps = walletAccount.read_snapshots({
-                                        limit: 10,
+                                        limit: "10",
                                         offset: CGI.escape(dt),
                                         asset: BTC_ASSET_ID,
                                         order: "ASC"
