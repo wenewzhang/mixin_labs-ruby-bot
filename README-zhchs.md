@@ -12,6 +12,8 @@
 
 3. [Ruby比特币开发教程: 创建比特币钱包](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README3-zhchs.md)
 
+4. [Ruby 买卖Bitcoin：ExinCore API 实时兑换](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README4-zhchs.md)
+
 ## 创建一个接受消息的机器人
 通过本教程，你将学会如何用Ruby创建一个机器人APP,让它能接受消息.
 
