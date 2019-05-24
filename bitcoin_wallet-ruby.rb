@@ -321,7 +321,18 @@ loop do
                                         asset: BTC_ASSET_ID,
                                         order: "ASC"
                                         })
-    p snaps["data"]
+    snaps["data"].each { |x|
+                        if x["amount"].to_f > 0
+                          if x["data"] != nil
+                            uData = MessagePack.unpack(Base64.decode64(x["data"]))
+                            p uData
+                            p "The code is " + uData["C"].to_s + " Price is " + uData["P"] + " Fee is " +
+                              uData["F"]
+                            p "Fee is Asset UUID is " + UUID.parse(uData["FA"]).to_s
+                            p "Order id is  " + UUID.parse(uData["O"]).to_s
+                          end
+                        end
+                        }
   end
   if cmd == "q"
     break
