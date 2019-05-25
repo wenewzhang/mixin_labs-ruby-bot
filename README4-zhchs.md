@@ -65,7 +65,7 @@ end
 ```
 
 #### 交易前，创建一个Memo!
-在第二章里,[基于Mixin Network的PHP比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README2-zhchs.md), 我们学习过退还用户比特币，在这里，我们除了给ExinCore支付币外，还要告诉他我们想购买的币是什么，即将想购买的币存到memo里。
+在第二章里,[基于Mixin Network的Ruby比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2-zhchs.md), 我们学习过退还用户比特币，在这里，我们除了给ExinCore支付币外，还要告诉他我们想购买的币是什么，即将想购买的币存到memo里。
 ```ruby
 memo1 = Base64.encode64(MessagePack.pack({
 'A' => UUID.parse(USDT_ASSET_ID).to_raw
