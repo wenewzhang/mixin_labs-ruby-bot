@@ -230,7 +230,7 @@ loop do
       p transInfo
    end
   end
-  if cmd == "tcm"
+  if cmd == "txm"
     assetsInfo = walletAccount.read_asset(XIN_ASSET_ID)
     if assetsInfo["data"]["balance"].to_f > 0
       transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
