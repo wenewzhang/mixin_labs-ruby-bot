@@ -1,4 +1,4 @@
-# 通过 Ruby 买卖Bitcoin
+# 通过 Ruby 买卖Bitcoin：使用开放交易所OceanOne
 ![](https://github.com/wenewzhang/mixin_labs-ruby-bot/raw/master/ruby-btc.jpg)
 上一章介绍了[Exincore](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README4-zhchs.md)，你可以1秒完成资产的市价买卖。如果你想限定价格买卖，或者买卖一些exincore不支持的资产，你需要OceanOne。
 
