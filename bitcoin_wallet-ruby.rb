@@ -43,7 +43,9 @@ PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance &
              "tcb:Transfer CNB from Bot to Wallet\ntcm:Transfer CNB from Wallet to Master\n" +
              "txb:Transfer XIN from Bot to Wallet\ntxm:Transfer XIN from Wallet to Master\n" +
              "trb:Transfer ERC20 from Bot to Wallet\ntrm:Transfer ERC20 from Wallet to Master\n" +
-             "5: Pay All BTC to ExinCore buy USDT\n6: Pay All USDT to ExinCore buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n" +
+             "5: Pay All BTC to ExinCore exchange USDT\n6: Pay All USDT to ExinCore buy BTC\n" +
+             "10: Pay all XIN to ExinCore exchange USDT\n" +
+             "7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n" +
              "v: Verify Wallet Pin\nwb: Withdraw BTC\nwe: WitchDraw EOS\nab: Read Bot Assets\naw: Read Wallet Assets\n" +
              "o: OceanOne Exchange\n" +
              "q: Exit \nMake your choose(eg: q for Exit!): "
@@ -214,6 +216,34 @@ loop do
       p transInfo
    end
   end
+  if cmd == "txb"
+    botAssetsInfo = botAccount.read_asset(XIN_ASSET_ID)
+    if botAssetsInfo["data"]["balance"].to_f > 0
+      transInfo = botAccount.create_transfer(botAccount.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
+                                        {
+                                          asset_id: XIN_ASSET_ID,
+                                          opponent_id: wallet_userid,
+                                          amount: botAssetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
+  if cmd == "tcm"
+    assetsInfo = walletAccount.read_asset(XIN_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: XIN_ASSET_ID,
+                                          opponent_id: MASTER_UUID,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
   if cmd == "tub"
     botAssetsInfo = botAccount.read_asset(USDT_ASSET_ID)
     if botAssetsInfo["data"]["balance"].to_f > 0
@@ -287,6 +317,25 @@ loop do
       transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
                                         {
                                           asset_id: BTC_ASSET_ID,
+                                          opponent_id: EXIN_BOT,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: memo
+                                        })
+       p transInfo
+    end
+  end
+  if cmd == "10"
+    memo1 = Base64.encode64(MessagePack.pack({
+    'A' => UUID.parse(USDT_ASSET_ID).to_raw
+    }))
+    memo = memo1.sub("\n","")
+    p memo
+    assetsInfo = walletAccount.read_asset(XIN_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: XIN_ASSET_ID,
                                           opponent_id: EXIN_BOT,
                                           amount: assetsInfo["data"]["balance"],
                                           trace_id: SecureRandom.uuid,
@@ -390,6 +439,52 @@ loop do
         p "Input the amount of USDT: "
         amount = gets.chomp
         memo = Utils.GenerateOceanMemo(BTC_ASSET_ID,"B",bprice)
+        p memo
+        assetsInfo = walletAccount.read_asset(USDT_ASSET_ID)
+        if assetsInfo["data"]["balance"].to_f >= 1 && assetsInfo["data"]["balance"].to_f >= amount.to_f
+          transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                            {
+                                              asset_id: USDT_ASSET_ID,
+                                              opponent_id: OCEANONE_BOT,
+                                              amount: amount,
+                                              trace_id: SecureRandom.uuid,
+                                              memo: memo
+                                            })
+          p transInfo
+          p "The Order id is " + transInfo["data"]["trace_id"] + " It's needed by cancel-order!"
+        else
+          p "Not enough USDT"
+        end
+      end
+      if ocmd == "s2"
+        p "Input the price of XIN/USDT: "
+        bprice = gets.chomp
+        p "Input the amount of XIN: "
+        amount = gets.chomp
+        memo = Utils.GenerateOceanMemo(USDT_ASSET_ID,"A",bprice)
+        p memo
+        assetsInfo = walletAccount.read_asset(XIN_ASSET_ID)
+        if assetsInfo["data"]["balance"].to_f > 0 && assetsInfo["data"]["balance"].to_f >= amount.to_f
+          transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                            {
+                                              asset_id: XIN_ASSET_ID,
+                                              opponent_id: OCEANONE_BOT,
+                                              amount: amount,
+                                              trace_id: SecureRandom.uuid,
+                                              memo: memo
+                                            })
+          p transInfo
+          p "The Order id is " + transInfo["data"]["trace_id"] + " It's needed by cancel-order!"
+        else
+          p "Not enough XIN"
+        end
+      end
+      if ocmd == "b2"
+        p "Input the price of XIN/USDT: "
+        bprice = gets.chomp
+        p "Input the amount of USDT: "
+        amount = gets.chomp
+        memo = Utils.GenerateOceanMemo(XIN_ASSET_ID,"B",bprice)
         p memo
         assetsInfo = walletAccount.read_asset(USDT_ASSET_ID)
         if assetsInfo["data"]["balance"].to_f >= 1 && assetsInfo["data"]["balance"].to_f >= amount.to_f

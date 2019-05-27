@@ -35,10 +35,14 @@ module Utils
                                             puts x["side"] + " " + x["price"] + " " +
                                             x["amount"] + " " + x["funds"]
                                           }
-     # .each { |x|
-     #       puts x["exchange_asset_symbol"] +  "/" +  x["base_asset_symbol"] + " " +
-     #            x["price"] + " " + x["minimum_amount"] + " " + x["maximum_amount"] +
-     #            " " + x["exchanges"][0]
-     #     }
+  end
+  def self.GenerateOceanMemo(targetAsset,side,price)
+    memo = Base64.encode64(MessagePack.pack({
+    'A' => UUID.parse(targetAsset).to_raw,
+    'S' => side,
+    'P' => price,
+    'T' => "L"
+    }))
+    return memo.sub("\n","")
   end
 end
