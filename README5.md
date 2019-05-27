@@ -1,4 +1,4 @@
-# How to list bitcoin order through Ruby
+# Buy and sell Bitcoin on DEX [Ruby lang]
 ![](https://github.com/wenewzhang/mixin_labs-ruby-bot/raw/master/ruby-btc.jpg)
 
 Exincore is introduced in [last chapter](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README4.md), you can exchange many crypto asset at market price and receive your asset in 1 seconds. If you want to trade asset at limited price, or trade asset is not supported by ExinCore now, OceanOne is the answer.
