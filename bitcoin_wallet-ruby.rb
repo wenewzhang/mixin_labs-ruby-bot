@@ -240,7 +240,7 @@ loop do
                                           memo: "from ruby"
                                         })
       p transInfo
-   end
+    end
   end
   if cmd == "tbb"
     botAssetsInfo = botAccount.read_asset(BTC_ASSET_ID)
@@ -348,6 +348,7 @@ loop do
              "s1: Sell BTC/USDT " + "b1: Buy BTC/USDT\n" +
              "s2: Sell XIN/USDT " + "b2: Buy XIN/USDT\n" +
              "s3: Sell ERC20/USDT " + "s3: Buy ERC20/USDT\n" +
+             "c: Cancel the order\n" +
              "q: Exit \nMake your choose(eg: q for Exit!): "
       puts oMsg
       ocmd = gets.chomp
@@ -372,7 +373,43 @@ loop do
         bprice = gets.chomp
         p "Input the amount of USDT: "
         amount = gets.chomp
-
+        memo = Utils.GenerateOceanMemo(BTC_ASSET_ID,"B",bprice)
+        p memo
+        assetsInfo = walletAccount.read_asset(USDT_ASSET_ID)
+        if assetsInfo["data"]["balance"].to_f > 0 && assetsInfo["data"]["balance"].to_f >= amount.to_f
+          transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                            {
+                                              asset_id: USDT_ASSET_ID,
+                                              opponent_id: OCEANONE_BOT,
+                                              amount: amount,
+                                              trace_id: SecureRandom.uuid,
+                                              memo: memo
+                                            })
+          p transInfo
+          p "The Order id is " + transInfo["data"]["trace_id"] + " It's needed by cancel-order!"
+        end
+      end
+      if ocmd == "c"
+        p "Input the Order ID: "
+        orderid = gets.chomp
+        memo1 = Base64.encode64(MessagePack.pack({
+        'O' => UUID.parse(orderid).to_raw
+        }))
+        memo = memo1.sub("\n","")
+        assetsInfo = walletAccount.read_asset(CNB_ASSET_ID)
+        if assetsInfo["data"]["balance"].to_f > 0
+          transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                            {
+                                              asset_id: CNB_ASSET_ID,
+                                              opponent_id: OCEANONE_BOT,
+                                              amount: "0.00000001",
+                                              trace_id: SecureRandom.uuid,
+                                              memo: memo
+                                            })
+          p transInfo
+        else
+          p "Not enough CNB!"
+        end
       end
     end
   end
