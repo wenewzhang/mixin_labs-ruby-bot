@@ -344,6 +344,10 @@ loop do
   if cmd == "o"
     loop do
       oMsg = "1: Fetch BTC/USDT Order Book\n2: Fetch XIN/USDT Order Book\n" +
+             "3: Fetch ERC20/USDT Order Book\n" +
+             "s1: Sell BTC/USDT " + "b1: Buy BTC/USDT\n" +
+             "s2: Sell XIN/USDT " + "b2: Buy XIN/USDT\n" +
+             "s3: Sell ERC20/USDT " + "s3: Buy ERC20/USDT\n" +
              "q: Exit \nMake your choose(eg: q for Exit!): "
       puts oMsg
       ocmd = gets.chomp
@@ -355,6 +359,20 @@ loop do
       end
       if ocmd == "2"
         Utils.OceanOneMarketPriceRequest(XIN_ASSET_ID, USDT_ASSET_ID)
+      end
+      if ocmd == "s1"
+        p "Input the price of BTC/USDT: "
+        bprice = gets.chomp
+        p "Input the amount of USDT: "
+        amount = gets.chomp
+
+      end
+      if ocmd == "b1"
+        p "Input the price of BTC/USDT: "
+        bprice = gets.chomp
+        p "Input the amount of USDT: "
+        amount = gets.chomp
+
       end
     end
   end
