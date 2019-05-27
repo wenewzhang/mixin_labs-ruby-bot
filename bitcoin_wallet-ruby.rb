@@ -19,7 +19,7 @@ USDT_ASSET_ID    = "815b0b1a-2764-3736-8faa-42d694fa620a"
 # private static final String ETC_ASSET_ID     = "2204c1ee-0ea2-4add-bb9a-b3719cfff93a";
 # private static final String XRP_ASSET_ID     = "23dfb5a5-5d7b-48b6-905f-3970e3176e27";
 # private static final String XEM_ASSET_ID     = "27921032-f73e-434e-955f-43d55672ee31";
-# private static final String ETH_ASSET_ID     = "43d61dcd-e413-450d-80b8-101d5e903357";
+ETH_ASSET_ID     = "43d61dcd-e413-450d-80b8-101d5e903357"
 # private static final String DASH_ASSET_ID    = "6472e7e3-75fd-48b6-b1dc-28d294ee1476";
 # private static final String DOGE_ASSET_ID    = "6770a1e5-6086-44d5-b60f-545f9d9e8ffd";
 # private static final String LTC_ASSET_ID     = "76c802a2-7c88-447f-a93e-c29c9e5dd9c8";
@@ -42,9 +42,12 @@ PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance &
              "tub:Transfer USDT from Bot to Wallet\ntum:Transfer USDT from Wallet to Master\n" +
              "tcb:Transfer CNB from Bot to Wallet\ntcm:Transfer CNB from Wallet to Master\n" +
              "txb:Transfer XIN from Bot to Wallet\ntxm:Transfer XIN from Wallet to Master\n" +
+             "tbb:Transfer ETH from Bot to Wallet\nttm:Transfer ETH from Wallet to Master\n" +
              "trb:Transfer ERC20 from Bot to Wallet\ntrm:Transfer ERC20 from Wallet to Master\n" +
              "5: Pay All BTC to ExinCore exchange USDT\n6: Pay All USDT to ExinCore buy BTC\n" +
              "10: Pay all XIN to ExinCore exchange USDT\n" +
+             "11: Pay all ETH to ExinCore exchange USDT\n" +
+             "12: Pay all EOS to ExinCore exchange USDT\n" +
              "7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n" +
              "v: Verify Wallet Pin\nwb: Withdraw BTC\nwe: WitchDraw EOS\nab: Read Bot Assets\naw: Read Wallet Assets\n" +
              "o: OceanOne Exchange\n" +
@@ -244,6 +247,34 @@ loop do
       p transInfo
    end
   end
+  if cmd == "ttb"
+    botAssetsInfo = botAccount.read_asset(ETH_ASSET_ID)
+    if botAssetsInfo["data"]["balance"].to_f > 0
+      transInfo = botAccount.create_transfer(botAccount.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
+                                        {
+                                          asset_id: ETH_ASSET_ID,
+                                          opponent_id: wallet_userid,
+                                          amount: botAssetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
+  if cmd == "ttm"
+    assetsInfo = walletAccount.read_asset(ETH_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: ETH_ASSET_ID,
+                                          opponent_id: MASTER_UUID,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
   if cmd == "tub"
     botAssetsInfo = botAccount.read_asset(USDT_ASSET_ID)
     if botAssetsInfo["data"]["balance"].to_f > 0
@@ -336,6 +367,44 @@ loop do
       transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
                                         {
                                           asset_id: XIN_ASSET_ID,
+                                          opponent_id: EXIN_BOT,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: memo
+                                        })
+       p transInfo
+    end
+  end
+  if cmd == "11"
+    memo1 = Base64.encode64(MessagePack.pack({
+    'A' => UUID.parse(USDT_ASSET_ID).to_raw
+    }))
+    memo = memo1.sub("\n","")
+    p memo
+    assetsInfo = walletAccount.read_asset(ETH_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: ETH_ASSET_ID,
+                                          opponent_id: EXIN_BOT,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: memo
+                                        })
+       p transInfo
+    end
+  end
+  if cmd == "12"
+    memo1 = Base64.encode64(MessagePack.pack({
+    'A' => UUID.parse(USDT_ASSET_ID).to_raw
+    }))
+    memo = memo1.sub("\n","")
+    p memo
+    assetsInfo = walletAccount.read_asset(EOS_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: EOS_ASSET_ID,
                                           opponent_id: EXIN_BOT,
                                           amount: assetsInfo["data"]["balance"],
                                           trace_id: SecureRandom.uuid,
