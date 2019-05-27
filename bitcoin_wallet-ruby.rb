@@ -27,7 +27,7 @@ USDT_ASSET_ID    = "815b0b1a-2764-3736-8faa-42d694fa620a"
 # private static final String ZEN_ASSET_ID     = "a2c5d22b-62a2-4c13-b3f0-013290dbac60";
 # private static final String ZEC_ASSET_ID     = "c996abc9-d94e-4494-b1cf-2a3fd3ac5714";
 # private static final String BCH_ASSET_ID     = "fd11b6e3-0b87-41f1-a41f-f0e9b49e5bf0";
-# private static final String XIN_ASSET_ID     = "c94ac88f-4671-3976-b60a-09064f1811e8";
+XIN_ASSET_ID     = "c94ac88f-4671-3976-b60a-09064f1811e8"
 CNB_ASSET_ID     = "965e5c6e-434c-3fa9-b780-c50f43cd955c"
 # private static final String ERC20_BENZ       = "2b9c216c-ef60-398d-a42a-eba1b298581d";
 BTC_WALLET_ADDR  = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C"
@@ -43,9 +43,10 @@ PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance &
              "tcb:Transfer CNB from Bot to Wallet\ntcm:Transfer CNB from Wallet to Master\n" +
              "txb:Transfer XIN from Bot to Wallet\ntxm:Transfer XIN from Wallet to Master\n" +
              "trb:Transfer ERC20 from Bot to Wallet\ntrm:Transfer ERC20 from Wallet to Master\n" +
-             "5: Pay 0.0001 BTC to ExinCore buy USDT\n6: Pay $1 USDT to ExinCore buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n" +
+             "5: Pay All BTC to ExinCore buy USDT\n6: Pay All USDT to ExinCore buy BTC\n7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n" +
              "v: Verify Wallet Pin\nwb: Withdraw BTC\nwe: WitchDraw EOS\nab: Read Bot Assets\naw: Read Wallet Assets\n" +
-             "o: Ocean.One Exchange\nq: Exit \nMake your choose(eg: q for Exit!): "
+             "o: OceanOne Exchange\n" +
+             "q: Exit \nMake your choose(eg: q for Exit!): "
 
 yaml_hash = YAML.load_file('./config.yml')
 bot_config = {
@@ -281,15 +282,18 @@ loop do
     }))
     memo = memo1.sub("\n","")
     p memo
-    transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
-                                      {
-                                        asset_id: BTC_ASSET_ID,
-                                        opponent_id: EXIN_BOT,
-                                        amount: "0.0001",
-                                        trace_id: SecureRandom.uuid,
-                                        memo: memo
-                                      })
-     p transInfo
+    assetsInfo = walletAccount.read_asset(BTC_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: BTC_ASSET_ID,
+                                          opponent_id: EXIN_BOT,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: memo
+                                        })
+       p transInfo
+    end
   end
   if cmd == "6"
     memo1 = Base64.encode64(MessagePack.pack({
@@ -297,15 +301,18 @@ loop do
     }))
     memo = memo1.sub("\n","")
     p memo
-    transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
-                                      {
-                                        asset_id: USDT_ASSET_ID,
-                                        opponent_id: EXIN_BOT,
-                                        amount: "1",
-                                        trace_id: SecureRandom.uuid,
-                                        memo: memo
-                                      })
-     p transInfo
+    assetsInfo = walletAccount.read_asset(USDT_ASSET_ID)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: USDT_ASSET_ID,
+                                          opponent_id: EXIN_BOT,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: memo
+                                        })
+       p transInfo
+   end
   end
   if cmd == "7"
     if wallet_userid == "5e4ad097-21e8-3f6b-98f7-9dc74dd99f77"
@@ -333,6 +340,23 @@ loop do
                           end
                         end
                         }
+  end
+  if cmd == "o"
+    loop do
+      oMsg = "1: Fetch BTC/USDT Order Book\n2: Fetch XIN/USDT Order Book\n" +
+             "q: Exit \nMake your choose(eg: q for Exit!): "
+      puts oMsg
+      ocmd = gets.chomp
+      if ocmd ==  "q"
+        break
+      end
+      if ocmd == "1"
+        Utils.OceanOneMarketPriceRequest(BTC_ASSET_ID, USDT_ASSET_ID)
+      end
+      if ocmd == "2"
+        Utils.OceanOneMarketPriceRequest(XIN_ASSET_ID, USDT_ASSET_ID)
+      end
+    end
   end
   if cmd == "q"
     break
