@@ -12,7 +12,7 @@ You can list any asset on OceanOne. Pay the asset you want to sell to OceanOne a
 * No listing process.
 
 ### Pre-request:
-You should  have created a bot based on Mixin Network. Create one by reading [Nodejs Bitcoin tutorial](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README.md).
+You should  have created a bot based on Mixin Network. Create one by reading [Ruby Bitcoin tutorial](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2.md).
 
 #### Install required packages
 This tutorial dependent **msgpack5** and **mixin-node-client**  , [chapter 4](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README4.md), assume them had installed before.
@@ -216,4 +216,4 @@ Commands list of this source code:
 - q: Exit
 Make your choose(eg: q for Exit!):
 
-[Full source code](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/bitcoin-wallet-ruby.rb)
+[Full source code](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/bitcoin_wallet-ruby.rb)

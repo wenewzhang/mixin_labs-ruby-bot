@@ -67,7 +67,7 @@ end
 ```
 
 #### 交易前，创建一个Memo!
-在第二章里,[基于Mixin Network的 Nodejs 比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2-zhchs.md), 我们学习过转帐，这儿我们介绍如何告诉Ocean.one，我们给它转帐的目的是什么，信息全部放在memo里.
+在第二章里,[Ruby比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README2-zhchs.md), 我们学习过转帐，这儿我们介绍如何告诉Ocean.one，我们给它转帐的目的是什么，信息全部放在memo里.
 - **side** 方向,"B" 或者 "A", "B"是购买, "A"是出售.
 - **targetAsset** 目标虚拟资产的UUID.
 - **price** 价格，如果操作方向是"B", 价格就是AssetUUID的价格; 如果操作方向是"B", 价格就是转给Ocean.one币的价格.
@@ -221,4 +221,4 @@ end
 - q: Exit
 Make your choose(eg: q for Exit!):
 
-[完整代码](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/bitcoin-wallet-ruby.rb)
+[完整代码](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/bitcoin_wallet-ruby.rb)
