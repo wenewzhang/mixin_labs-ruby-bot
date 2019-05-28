@@ -25,16 +25,17 @@ if cmd == "aw"
   p "----------End of Wallet Assets --------------"
 end
 ```
-The detail information of **getAssets** is output like below:
+The detail information of **read_assets** is output like below:
 ```bash
-Make your choose:aw
-run...
-client id is:26b20aa5-40c0-3e00-9de0-666cfb6f2daa
-Benz   2b9c216c-ef60-398d-a42a-eba1b298581d   799   0x9A4F6c67444cd6558905ef5B04a4c429b9538A9d
-EOS   6cfe566e-4aad-470b-8c9a-2fd35b49c68d   0
-CNB   965e5c6e-434c-3fa9-b780-c50f43cd955c   4.72599997   0x9A4F6c67444cd6558905ef5B04a4c429b9538A9d
-BTC   c6d0c728-2624-429b-8e0d-d9d19b6592fa   0   17z1Rq3VsyvvXvGWiHT8YErjBoFgnhErB8
-XIN   c94ac88f-4671-3976-b60a-09064f1811e8   0.01   0x9A4F6c67444cd6558905ef5B04a4c429b9538A9d
+"--------The Wallet Assets List-----------------"
+Benz 10.03 0x822664c2EFb27E2Eb4c4286f421B4BF6FB943fC6
+ETH 0 0x822664c2EFb27E2Eb4c4286f421B4BF6FB943fC6
+EOS 0 eoswithmixin b0adfae2f8828d15e11cb1fbe23d6096
+USDT 1 1KB4RbV5W4MNybpjcJjULKNVXubfR5MJqA
+CNB 0.99999995 0x822664c2EFb27E2Eb4c4286f421B4BF6FB943fC6
+BTC 0 1KB4RbV5W4MNybpjcJjULKNVXubfR5MJqA
+"----------End of Wallet Assets --------------"
+-------------------------------------------------------------------------
 ```
 ### Make the limit order
 - **Limit Order to Buy**  at or below the market.

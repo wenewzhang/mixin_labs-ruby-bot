@@ -16,7 +16,7 @@
 
 5. [Ruby 买卖Bitcoin：在自由市场Ocean.One挂单买卖](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README5-zhchs.md)
 
-<!-- 6. [PHP 买卖任意ERC20 token：在自由市场Ocean.One挂单买卖]() -->
+6. [Ruby 买卖任意ERC20 token：在自由市场Ocean.One挂单买卖](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README6-zhchs.md)
 
 ## 创建一个接受消息的机器人
 通过本教程，你将学会如何用Ruby创建一个机器人APP,让它能接受消息.

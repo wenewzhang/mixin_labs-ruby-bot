@@ -15,6 +15,8 @@ A Mixin messenger bot will be created in this tutorial. The bot is powered by Ru
 
  5. [How to trade bitcoin through Ruby: List your order on Ocean.One](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README5.md) | [Chinese](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README5-zhchs.md)
 
+ 6. [How to trade ERC-20 compliant coins on OceanOne through Ruby](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README6.md) | [Chinese](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README6-zhchs.md)
+
 ## Create bot in Mixin messenger and reply message to user
 ### Ruby environment setup:
 This tutorial is written in Ruby.
