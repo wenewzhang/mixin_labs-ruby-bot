@@ -349,6 +349,34 @@ loop do
       p transInfo
    end
   end
+  if cmd == "trb"
+    botAssetsInfo = botAccount.read_asset(ERC20_BENZ)
+    if botAssetsInfo["data"]["balance"].to_f > 0
+      transInfo = botAccount.create_transfer(botAccount.encrypt_pin(yaml_hash["MIXIN_PIN_CODE"]),
+                                        {
+                                          asset_id: ERC20_BENZ,
+                                          opponent_id: wallet_userid,
+                                          amount: botAssetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
+  if cmd == "trm"
+    assetsInfo = walletAccount.read_asset(ERC20_BENZ)
+    if assetsInfo["data"]["balance"].to_f > 0
+      transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                        {
+                                          asset_id: ERC20_BENZ,
+                                          opponent_id: MASTER_UUID,
+                                          amount: assetsInfo["data"]["balance"],
+                                          trace_id: SecureRandom.uuid,
+                                          memo: "from ruby"
+                                        })
+      p transInfo
+   end
+  end
   if cmd == "8"
     Utils.ExinCoreMarketPriceRequest(USDT_ASSET_ID)
   end
