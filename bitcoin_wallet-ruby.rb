@@ -29,7 +29,7 @@ ETH_ASSET_ID     = "43d61dcd-e413-450d-80b8-101d5e903357"
 # private static final String BCH_ASSET_ID     = "fd11b6e3-0b87-41f1-a41f-f0e9b49e5bf0";
 XIN_ASSET_ID     = "c94ac88f-4671-3976-b60a-09064f1811e8"
 CNB_ASSET_ID     = "965e5c6e-434c-3fa9-b780-c50f43cd955c"
-# private static final String ERC20_BENZ       = "2b9c216c-ef60-398d-a42a-eba1b298581d";
+ERC20_BENZ       = "2b9c216c-ef60-398d-a42a-eba1b298581d"
 BTC_WALLET_ADDR  = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C"
 MASTER_UUID      = "0b4f49dc-8fb4-4539-9a89-fb3afc613747"
 # private static final String WALLET_FILANAME  = "./mybitcoin_wallet.csv";
@@ -479,6 +479,9 @@ loop do
       if ocmd == "2"
         Utils.OceanOneMarketPriceRequest(XIN_ASSET_ID, USDT_ASSET_ID)
       end
+      if ocmd == "3"
+        Utils.OceanOneMarketPriceRequest(ERC20_BENZ, USDT_ASSET_ID)
+      end
       if ocmd == "s1"
         p "Input the price of BTC/USDT: "
         bprice = gets.chomp
@@ -554,6 +557,52 @@ loop do
         p "Input the amount of USDT: "
         amount = gets.chomp
         memo = Utils.GenerateOceanMemo(XIN_ASSET_ID,"B",bprice)
+        p memo
+        assetsInfo = walletAccount.read_asset(USDT_ASSET_ID)
+        if assetsInfo["data"]["balance"].to_f >= 1 && assetsInfo["data"]["balance"].to_f >= amount.to_f
+          transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                            {
+                                              asset_id: USDT_ASSET_ID,
+                                              opponent_id: OCEANONE_BOT,
+                                              amount: amount,
+                                              trace_id: SecureRandom.uuid,
+                                              memo: memo
+                                            })
+          p transInfo
+          p "The Order id is " + transInfo["data"]["trace_id"] + " It's needed by cancel-order!"
+        else
+          p "Not enough USDT"
+        end
+      end
+      if ocmd == "s3"
+        p "Input the price of ERC/USDT: "
+        bprice = gets.chomp
+        p "Input the amount of ERC20_BENZ: "
+        amount = gets.chomp
+        memo = Utils.GenerateOceanMemo(USDT_ASSET_ID,"A",bprice)
+        p memo
+        assetsInfo = walletAccount.read_asset(ERC20_BENZ)
+        if assetsInfo["data"]["balance"].to_f > 0 && assetsInfo["data"]["balance"].to_f >= amount.to_f
+          transInfo = walletAccount.create_transfer(walletAccount.encrypt_pin(DEFAULT_PIN),
+                                            {
+                                              asset_id: ERC20_BENZ,
+                                              opponent_id: OCEANONE_BOT,
+                                              amount: amount,
+                                              trace_id: SecureRandom.uuid,
+                                              memo: memo
+                                            })
+          p transInfo
+          p "The Order id is " + transInfo["data"]["trace_id"] + " It's needed by cancel-order!"
+        else
+          p "Not enough ERC20_BENZ"
+        end
+      end
+      if ocmd == "b3"
+        p "Input the price of ERC20/USDT: "
+        bprice = gets.chomp
+        p "Input the amount of USDT: "
+        amount = gets.chomp
+        memo = Utils.GenerateOceanMemo(ERC20_BENZ,"B",bprice)
         p memo
         assetsInfo = walletAccount.read_asset(USDT_ASSET_ID)
         if assetsInfo["data"]["balance"].to_f >= 1 && assetsInfo["data"]["balance"].to_f >= amount.to_f
