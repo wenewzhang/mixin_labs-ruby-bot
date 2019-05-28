@@ -31,6 +31,7 @@ XIN_ASSET_ID     = "c94ac88f-4671-3976-b60a-09064f1811e8"
 CNB_ASSET_ID     = "965e5c6e-434c-3fa9-b780-c50f43cd955c"
 ERC20_BENZ       = "2b9c216c-ef60-398d-a42a-eba1b298581d"
 BTC_WALLET_ADDR  = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C"
+USDT_WALLET_ADDR = "1PaXk8etFpWdxMJNmDuVh8kFts2HWGwhC3"
 MASTER_UUID      = "0b4f49dc-8fb4-4539-9a89-fb3afc613747"
 # private static final String WALLET_FILANAME  = "./mybitcoin_wallet.csv";
 EOS_THIRD_EXCHANGE_NAME = "huobideposit"
@@ -49,7 +50,7 @@ PromptMsg  = "1: Create Bitcoin Wallet and update PIN\n2: Read Bitcoin balance &
              "11: Pay all ETH to ExinCore exchange USDT\n" +
              "12: Pay all EOS to ExinCore exchange USDT\n" +
              "7: Read Snapshots\n8: Fetch market price(USDT)\n9: Fetch market price(BTC)\n" +
-             "v: Verify Wallet Pin\nwb: Withdraw BTC\nwe: WitchDraw EOS\nab: Read Bot Assets\naw: Read Wallet Assets\n" +
+             "v: Verify Wallet Pin\nwb: Withdraw BTC\nwb: Withdraw USDT\nwe: WitchDraw EOS\nab: Read Bot Assets\naw: Read Wallet Assets\n" +
              "o: OceanOne Exchange\n" +
              "q: Exit \nMake your choose(eg: q for Exit!): "
 
@@ -154,11 +155,28 @@ loop do
     # addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
     # p addressInfo2
 
-    withdrawInfo = walletAccount.withdrawals(addressInfo["data"]["address_id"],
-                                            DEFAULT_PIN,
-                                            "0.1",
-                                            SecureRandom.uuid,"from ruby")
-    p withdrawInfo
+    # withdrawInfo = walletAccount.withdrawals(addressInfo["data"]["address_id"],
+    #                                         DEFAULT_PIN,
+    #                                         "0.1",
+    #                                         SecureRandom.uuid,"from ruby")
+    # p withdrawInfo
+  end
+  if cmd == "wu"
+    addressInfo = walletAccount.create_withdraw_address(USDT_ASSET_ID,
+                                                         DEFAULT_PIN,
+                                                         USDT_WALLET_ADDR,
+                                                         "","",
+                                                         "from ruby")
+    p addressInfo
+    p "The address id is " + addressInfo["data"]["address_id"] + " it is needed by read fee!"
+    # addressInfo2 = MixinBot.api.del_withdraw_address(addressInfo["data"]["address_id"], DEFAULT_PIN)
+    # p addressInfo2
+
+    # withdrawInfo = walletAccount.withdrawals(addressInfo["data"]["address_id"],
+    #                                         DEFAULT_PIN,
+    #                                         "0.1",
+    #                                         SecureRandom.uuid,"from ruby")
+    # p withdrawInfo
   end
   if cmd == "we"
     addressInfo = walletAccount.create_withdraw_address(EOS_ASSET_ID,
