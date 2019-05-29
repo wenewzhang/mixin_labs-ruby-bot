@@ -1,5 +1,5 @@
 # How to list any ERC20 token on decentralized market through Ruby
-![](https://github.com/wenewzhang/mixin_labs-ruby-bot/raw/master/ruby-btc.jpg)
+![](https://github.com/wenewzhang/mixin_labs-ruby-bot/raw/master/ruby-eth.jpg)
 
 OceanOne is introduced in [last chapter](https://github.com/wenewzhang/mixin_labs-ruby-bot/blob/master/README5.md), you can trade Bitcoin. All kinds of crypto asset on Mixin Network can be listed on OceanOne.All ERC20 token and EOS token can be listed. Following example will show you how to list a ERC20 token. You can list other token after read the tutorial.
 
